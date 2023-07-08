@@ -304,6 +304,7 @@ class FlutterLogin extends StatefulWidget {
     this.confirmSignupKeyboardType,
     this.headerWidget,
     this.onSwitchToAdditionalFields,
+    this.onResendActivationEmail,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
 
@@ -419,6 +420,8 @@ class FlutterLogin extends StatefulWidget {
   /// Called when the user hits the resend code button in confirm signup mode
   /// Only when onConfirmSignup is set
   final SignupCallback? onResendCode;
+
+  final ResendActivationEmailCallback? onResendActivationEmail;
 
   /// Prefilled (ie. saved from previous session) value at startup for username
   /// (Auth class calls username email, therefore we use savedEmail here aswell)
@@ -823,6 +826,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         passwordValidator: passwordValidator,
                         onSubmit: _reverseHeaderAnimation,
                         onSubmitCompleted: widget.onSubmitAnimationCompleted,
+                        onResendActivationEmail: widget.onResendActivationEmail,
                         hideSignUpButton: widget.onSignup == null,
                         hideForgotPasswordButton:
                             widget.hideForgotPasswordButton,

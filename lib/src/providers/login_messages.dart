@@ -36,8 +36,10 @@ class LoginMessages with ChangeNotifier {
     this.setPasswordButton = defaultSetPasswordButton,
     this.confirmRecoverSuccess = defaultConfirmRecoverSuccess,
     this.recoverCodePasswordDescription = defaultRecoverCodePasswordDescription,
+    this.resendEmailButton = defaultResendEmailButton,
   });
 
+  static const defaultResendEmailButton = 'Re-send an activation email';
   static const defaultPasswordHint = 'Password';
   static const defaultConfirmPasswordHint = 'Confirm Password';
   static const defaultForgotPasswordButton = 'Forgot Password?';
@@ -96,6 +98,8 @@ class LoginMessages with ChangeNotifier {
 
   /// Forgot password button's label
   final String forgotPasswordButton;
+
+  final String resendEmailButton;
 
   /// Login button's label
   final String loginButton;

@@ -19,6 +19,7 @@ class _LoginCard extends StatefulWidget {
     this.loginAfterSignUp = true,
     this.hideProvidersTitle = false,
     this.introWidget,
+    this.onResendActivationEmail,
   });
 
   final AnimationController loadingController;
@@ -26,6 +27,7 @@ class _LoginCard extends StatefulWidget {
   final bool? validateUserImmediately;
   final FormFieldValidator<String>? passwordValidator;
   final VoidCallback onSwitchRecoveryPassword;
+  final ResendActivationEmailCallback? onResendActivationEmail;
   final VoidCallback onSwitchSignUpAdditionalData;
   final VoidCallback onSwitchConfirmSignup;
   final VoidCallback? onSubmitCompleted;
@@ -448,6 +450,26 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildResendActivationEmail(
+    ThemeData theme,
+    LoginMessages messages,
+    Auth auth,
+  ) {
+    return TextButton(
+      onPressed: buttonEnabled && widget.onResendActivationEmail != null
+          ? () {
+              _formKey.currentState!.save();
+              widget.onResendActivationEmail!(auth.email);
+            }
+          : null,
+      child: Text(
+        messages.resendEmailButton,
+        style: theme.textTheme.bodyMedium,
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
+
   Widget _buildSubmitButton(
     ThemeData theme,
     LoginMessages messages,
@@ -741,7 +763,10 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             child: Column(
               children: <Widget>[
                 if (!widget.hideForgotPasswordButton)
-                  _buildForgotPassword(theme, messages)
+                  if (isLogin)
+                    _buildForgotPassword(theme, messages)
+                  else
+                    _buildResendActivationEmail(theme, messages, auth)
                 else
                   SizedBox.fromSize(
                     size: const Size.fromHeight(16),

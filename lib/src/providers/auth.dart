@@ -44,6 +44,8 @@ typedef ConfirmSignupRequiredCallback = Future<bool> Function(LoginData);
 /// The result is an error message, callback successes if message is null
 typedef ConfirmRecoverCallback = Future<String?>? Function(String, LoginData);
 
+typedef ResendActivationEmailCallback = void Function(String);
+
 class Auth with ChangeNotifier {
   Auth({
     this.loginProviders = const [],

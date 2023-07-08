@@ -52,6 +52,7 @@ class AuthCard extends StatefulWidget {
     required this.scrollable,
     required this.confirmSignupKeyboardType,
     this.introWidget,
+    this.onResendActivationEmail,
   });
 
   final EdgeInsets padding;
@@ -61,6 +62,7 @@ class AuthCard extends StatefulWidget {
   final FormFieldValidator<String>? passwordValidator;
   final VoidCallback? onSubmit;
   final VoidCallback? onSubmitCompleted;
+  final ResendActivationEmailCallback? onResendActivationEmail;
   final bool hideForgotPasswordButton;
   final bool hideSignUpButton;
   final bool loginAfterSignUp;
@@ -367,6 +369,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                 widget.onSubmitCompleted!();
               });
             },
+            onResendActivationEmail: widget.onResendActivationEmail,
             requireSignUpConfirmation: requireSignUpConfirmation,
             onSwitchConfirmSignup: () => _changeCard(_confirmSignup),
             hideSignUpButton: widget.hideSignUpButton,
