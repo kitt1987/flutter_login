@@ -170,13 +170,10 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       if (widget.controller?.value.text != null) {
         try {
           final parsed = pnp.PhoneNumber.parse(widget.controller!.value.text);
-          if (parsed.isValid()) {
-            _phoneNumberInitialValue = PhoneNumber(
-              phoneNumber: parsed.nsn,
-              isoCode: parsed.isoCode.name,
-              dialCode: parsed.countryCode,
-            );
-          }
+          _phoneNumberInitialValue = PhoneNumber(
+            isoCode: parsed.isoCode.name,
+            dialCode: parsed.countryCode,
+          );
         } on pnp.PhoneNumberException {
           // ignore
         } finally {
