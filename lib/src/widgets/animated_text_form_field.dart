@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_login/src/widgets/term_of_service_checkbox.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart' as pnp;
 import 'package:url_launcher/url_launcher.dart';
@@ -244,7 +245,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     );
   }
 
-  InputDecoration _getInputDecoration(ThemeData theme) {
+  InputDecoration _getInputDecoration(ThemeData theme, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: widget.labelText,
       prefixIcon: _buildInertiaAnimation(widget.prefixIcon),
@@ -252,9 +253,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
         widget.loadingController != null
             ? FadeTransition(
                 opacity: suffixIconOpacityAnimation,
-                child: widget.suffixIcon,
+                child: suffixIcon ?? widget.suffixIcon,
               )
-            : widget.suffixIcon,
+            : suffixIcon ?? widget.suffixIcon,
       ),
     );
   }
@@ -358,6 +359,39 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.left,
               ),
+      );
+    } else if (widget.userType == LoginUserType.date) {
+      final suffixIcon = IconButton(
+        icon: const Icon(Icons.date_range),
+        onPressed: () async {
+          final now = DateTime.now();
+          final date = await showDatePicker(
+            context: context,
+            initialDate: now.subtract(const Duration(days: 15 * 365)),
+            firstDate: now.subtract(const Duration(days: 120 * 365)),
+            lastDate: now.subtract(const Duration(days: 5 * 365)),
+          );
+          if (date == null) return;
+          widget.controller?.text =
+              DateFormat.yMd(Intl.getCurrentLocale()).format(date);
+        },
+      );
+      inputField = TextFormField(
+        cursorColor: theme.primaryColor,
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        decoration: _getInputDecoration(theme, suffixIcon: suffixIcon),
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        obscureText: widget.obscureText,
+        onFieldSubmitted: widget.onFieldSubmitted,
+        onSaved: widget.onSaved,
+        validator: widget.validator,
+        enabled: widget.enabled,
+        readOnly: true,
+        showCursor: false,
+        autocorrect: false,
+        autofillHints: widget.autofillHints,
       );
     } else {
       inputField = TextFormField(
